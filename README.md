@@ -1,35 +1,32 @@
 # 🛒 Mercadona Expenses Engine (v8.1)
 
-> **Automatización financiera personal impulsada por IA.**
-> *Transforma correos de confirmación de compra en inteligencia de negocio real.*
+> **Automatización FinOps personal con Gemini 2.5 Flash.**
+> *Ingesta, procesamiento y análisis de gastos domésticos en tiempo real.*
 
 ---
 
 ### 📋 Resumen Ejecutivo
-Este sistema resuelve el problema de la **trazabilidad de gastos hormiga** en la economía doméstica. Automatiza el flujo completo desde la recepción del ticket digital hasta la analítica en hojas de cálculo, eliminando el error humano y ahorrando aproximadamente **2 horas manuales al mes**.
+Sistema diseñado para ingerir el flujo de gastos proveniente de facturas digitales (PDF). Elimina la entrada manual mediante un motor de IA que extrae ítems línea por línea, **normaliza idiomas regionales (Catalán → Español)** y cruza datos con presupuestos dinámicos.
 
-### 🏗️ Arquitectura Técnica
-El proyecto sigue una arquitectura **Serverless** basada en eventos, alojada en el ecosistema de Google.
+### 🏗️ Arquitectura Técnica (SOA)
+El proyecto sigue una arquitectura orientada a servicios, desacoplando estrictamente lógica, datos y vistas.
 
-* **Core:** Google Apps Script (V8 Runtime).
-* **Inteligencia:** Gemini 1.5 Flash (vía API REST) para OCR y extracción estructurada.
-* **Persistencia:** Google Sheets (como Base de Datos NoSQL ligera).
-* **Interfaz:** HTMLService (SPA con Tailwind CSS).
+* **Orquestador:** `Controller.gs` (Trigger horario).
+* **IA Gateway:** `Service_Gemini.gs` conectando con **Gemini 2.5 Flash** (Enterprise API).
+* **Persistencia:** `Service_Data.gs` (CRUD sobre Google Sheets).
+* **Notificaciones:** `Service_Notify.gs` (Renderizado de plantillas HTML con "Semáforo Financiero").
+* **Mantenimiento:** `Fix_Reprocess_Zeros.gs` (Re-escaneo forense de errores OCR).
 
-### 🔄 Flujo de Datos (Data Journey)
-1.  **Trigger:** Detección de correo de Mercadona (Gmail API).
-2.  **Extracción:** El PDF adjunto se envía a Gemini 1.5 Flash.
-3.  **Procesamiento:**
-    * Lectura de líneas de producto.
-    * Normalización de nombres.
-    * *Regla de Negocio:* `Precio Unitario` = `Precio Final` (Gestión de descuentos).
-4.  **Storage:** Inserción en Google Sheets + Actualización de Dashboard.
+### 🔄 Data Journey & Lógica Crítica
+1.  **Input:** Detección de tickets (Gmail API) + Conversión a Base64.
+2.  **Inferencia:** Prompt System con instrucción de traducción simultánea y extracción JSON estricta.
+3.  **Validación:** Sanitización de Markdown y verificación de integridad.
+4.  **Output:** Reporte email HTML + Archivo en Drive.
 
-### 🛠️ Configuración (Setup)
-Este proyecto utiliza `ScriptProperties` para manejar secretos.
-Requiere:
-- `GEMINI_API_KEY`: Llave de Google AI Studio.
-- `SPREADSHEET_ID`: ID de la hoja de destino.
+### 🛠️ Stack & Configuración
+* **Runtime:** Google Apps Script V8.
+* **Seguridad:** `BLOCK_NONE` en Safety Settings para evitar falsos positivos en productos sensibles.
+* **Límites:** Batching de 10 correos/ejecución para gestión de cuotas de GAS.
 
 ---
-*Desarrollado como parte de mi portfolio de Arquitectura de Soluciones Cloud & AI.*
+*Estado Actual: Backend Operativo / Frontend (SPA) en desarrollo.*
