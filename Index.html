@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body class="bg-slate-100 min-h-screen p-6 font-sans">
+    
+    <div class="max-w-5xl mx-auto">
+      
+      <header class="bg-white rounded-xl shadow-sm p-6 mb-6 flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-800">🛒 Mercadona FinOps</h1>
+          <p class="text-slate-500 text-sm">Dashboard de Control de Gastos v8.1</p>
+        </div>
+        <div class="bg-green-100 text-green-700 px-4 py-2 rounded-lg font-medium">
+          Estado: Online 🟢
+        </div>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+          <h2 class="font-semibold text-slate-700 mb-4">Gasto vs Presupuesto</h2>
+          <canvas id="chartPresupuesto"></canvas>
+        </div>
+        
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+          <h2 class="font-semibold text-slate-700 mb-4">Categorías Top</h2>
+          <div class="h-48 flex items-center justify-center bg-slate-50 text-slate-400 border border-dashed rounded-lg">
+            (Gráfico pendiente de integración)
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+      // Ejemplo rápido para verificar que Chart.js carga
+      const ctx = document.getElementById('chartPresupuesto');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Gastado', 'Restante'],
+          datasets: [{
+            data: [300, 150], // Datos falsos de prueba
+            backgroundColor: ['#ef4444', '#22c55e']
+          }]
+        }
+      });
+    </script>
+  </body>
+</html>
